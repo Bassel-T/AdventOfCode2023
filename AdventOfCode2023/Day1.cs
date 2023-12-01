@@ -15,16 +15,19 @@ namespace AdventOfCode2023
             using (var reader = new StreamReader("input.txt"))
             {
                 var lines = reader.ReadToEnd().Split("\r\n");
-                Regex regex = new Regex(@"[0-9]");
-                var sum = 0;
 
-                foreach(var line in lines)
+                // Find numbers
+                Regex regex = new Regex(@"[0-9]");
+                var sum = lines.Sum(line =>
                 {
                     var matches = regex.Matches(line);
 
+                    // sum += 10x + y; x => first digit, y => second digit
                     if (matches.Any())
-                        sum += int.Parse(matches.First().Value) * 10 + int.Parse(matches.Last().Value);
-                }
+                        return int.Parse(matches.First().Value) * 10 + int.Parse(matches.Last().Value);
+
+                    return 0;
+                });
 
                 Console.WriteLine(sum);
             }
@@ -36,28 +39,27 @@ namespace AdventOfCode2023
             {
                 var lines = reader.ReadToEnd().Split("\r\n");
                 Regex regex = new Regex(@"[0-9]");
-                var sum = 0;
-
-                foreach (var line in lines)
+                var sum = lines.Sum(line =>
                 {
-                    var newline = line.Replace("one", "o1e");
-                    newline = newline.Replace("two", "t2o");
-                    newline = newline.Replace("three", "t3e");
-                    newline = newline.Replace("four", "f4r");
-                    newline = newline.Replace("five", "f5e");
-                    newline = newline.Replace("six", "s6x");
-                    newline = newline.Replace("seven", "s7n");
-                    newline = newline.Replace("eight", "e8t");
-                    newline = newline.Replace("nine", "n9e");
-                    var matches = regex.Matches(newline);
+                    // Numbers can overlap, keep first and last digits of each, convert rest to number
+                    line = line.Replace("one", "o1e")
+                               .Replace("two", "t2o")
+                               .Replace("three", "t3e")
+                               .Replace("four", "f4r")
+                               .Replace("five", "f5e")
+                               .Replace("six", "s6x")
+                               .Replace("seven", "s7n")
+                               .Replace("eight", "e8t")
+                               .Replace("nine", "n9e");
 
+                    var matches = regex.Matches(line);
+
+                    // sum += 10x + y; x => first digit, y => second digit
                     if (matches.Any())
-                    {
-                        var num = int.Parse(matches.First().Value) * 10 + int.Parse(matches.Last().Value);
-                        Console.WriteLine($"{line}: {num}");
-                        sum += num;
-                    }
-                }
+                        return int.Parse(matches.First().Value) * 10 + int.Parse(matches.Last().Value);
+
+                    return 0;
+                });
 
                 Console.WriteLine(sum);
             }
